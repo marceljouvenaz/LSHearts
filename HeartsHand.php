@@ -2,88 +2,89 @@
 
 
 namespace MRJ\LSHearts;
-use MRJ\LSHearts\HeartsCard;
 
 class HeartsHand
 {
-    /**
-     * HeartsHand is a class that will contain the distribution of cards among the players,
-     * It could have been 1 array of 32 cards, but I think it will be easier to debug and read for others if I create four arrays of 8 cards,
-     * I could have chosen to delete played cards from the hands, but in order to replay a hand, which is not yet a requirement,
-     * I have chosen to keep all cards on the record, and cards will hold a property that identifies them as 'in hand' versus 'played'
-     */
-
-    var $north = array();
-    var $east = array();
-    var $south = array();
-    var $west = array();
+    var $myplayers;
+    var $myscore;
 
     function __construct()
     {
+        $this->myplayers = [new HeartsPlayer(), new HeartsPlayer(), new HeartsPlayer(), new HeartsPlayer()];
+        $this->myscore = new HeartsScore();
     }
 
     /**
-     * @return array of HeartsCard
+     * @param array $myplayers
+     * actually an array of four HeartsPlayer
      */
-    public function getNorth(): array
+    public function setMyplayers(array $myplayers)
     {
-        return $this->north;
+        $this->myplayers = $myplayers;
     }
 
     /**
-     * @return array of HeartsCard
+     * @return array
+     * actually an array of four HeartsPlayer
      */
-    public function getSouth(): array
+    public function getMyplayers() :array
     {
-        return $this->south;
+        return $this->myplayers;
     }
 
-    /**
-     * @return array of HeartsCard
-     */
-    public function getEast(): array
-    {
-        return $this->east;
-    }
 
     /**
-     * @return array of HeartsCard
+     * this is simpler than dealing random cards then and checking whether they have already been dealt
+     * also now the cards are automatically sorted in each player,
+     * first by suit and then by face
+     * I will use this when playing a card in the correct suit,
      */
-    public function getWest(): array
-    {
-        return $this->west;
+    function dealCards(){
+        for ($i=0;$i<32;$i++){
+            do {
+                $success = $this->dealCardToPlayer($i, rand(0,3));
+            } while ($success != true);
+        }
     }
 
-    /**
-     * @param array of HeartsCard $east
-     */
-    public function setEast(array $east)
-    {
-        $this->east = $east;
+    function dealCardToPlayer(int $cardnumber, int $player) :bool {
+        if(8 > count($this->getMyplayers()[$player])){
+            $this->getMyplayers()[4]->addCard($cardnumber);
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    /**
-     * @param array of HeartsCard $north
-     */
-    public function setNorth(array $north)
-    {
-        $this->north = $north;
+    function playRounds(){
+        for ($i=0; $i<8; $i++){
+            $temp = $this->playRound();
+            $this->calcScore($temp);
+        }
     }
 
-    /**
-     * @param array of HeartsCard $south
-     */
-    public function setSouth(array $south)
-    {
-        $this->south = $south;
+    function playRound() :array{
+        $suit = 0;
+        $myround = array();
+        for ($i=0; $i<4; $i++){
+            $myround[$i] = $this->myplayers[$i]->playCard($suit);
+            if($suit == 0){
+                $suit = $myround[$i]->getSuit();
+            }
+        }
+        return $myround;
     }
 
-    /**
-     * @param array of HeartsCard $west
-     */
-    public function setWest(array $west)
-    {
-        $this->west = $west;
+    function calcScore(array $myround){
+        $loser = 0;
+        $points = 0;
+        for ($i=1; $i<4; $i++){
+            if ($myround[$loser]->getSuit() == ($myround[$i]->getSuit())and($myround[$loser]->getFace()<$myround[$i]->getFace())){
+                $loser = $i;
+            }
+            $points += $myround[$i]->getPoints();
+        }
+        $this->myscore->addPoints($loser, $points);
     }
 
 }

@@ -6,79 +6,37 @@ namespace MRJ\LSHearts;
 
 class HeartsScore
 {
-    var $northpoints;
-    var $eastpoints;
-    var $southpoints;
-    var $westpoints;
+    var $mypoints;
 
-    /**
-     * HeartsScore constructor.
-     */
-    function __construct()
-    {
+    function __construct(){
+        $this->setMypoints([0,0,0,0]);
+    }
+
+    function addPoints(int $player, int $points){
+        $temp = $this->getMypoints();
+        $temp[$player] += $points;
+        $this->setMypoints($temp);
+    }
+
+    function continueGame() :bool{
+        if(max($this->mypoints)<50){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
-     * @return integer
+     * @param array $mypoints
      */
-    public function getNorthpoints(): int
-    {
-        return $this->northpoints;
+    public function setMypoints(array $mypoints) {
+        $this->mypoints = $mypoints;
     }
 
     /**
-     * @return integer
+     * @return array
      */
-    public function getEastpoints(): int
-    {
-        return $this->eastpoints;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getSouthpoints(): int
-    {
-        return $this->southpoints;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getWestpoints(): int
-    {
-        return $this->westpoints;
-    }
-
-    /**
-     * @param integer $eastpoints
-     */
-    public function setEastpoints(int $eastpoints)
-    {
-        $this->eastpoints = $eastpoints;
-    }
-
-    /**
-     * @param integer $northpoints
-     */
-    public function setNorthpoints(int $northpoints)
-    {
-        $this->northpoints = $northpoints;
-    }
-
-    /**
-     * @param integer $southpoints
-     */
-    public function setSouthpoints(int $southpoints)
-    {
-        $this->southpoints = $southpoints;
-    }
-
-    /**
-     * @param integer $westpoints
-     */
-    public function setWestpoints(int $westpoints)
-    {
-        $this->westpoints = $westpoints;
+    public function getMypoints(): array {
+        return $this->mypoints;
     }
 }

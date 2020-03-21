@@ -6,40 +6,59 @@ namespace MRJ\LSHearts;
 
 class  HeartsCard
 {
-    /**
-     * HeartsCard is a class that describes a card, suit, number, status,
-     */
+    var $number;    // integer [0..31] control value = 42, would have loved to use 0 for control value, but that's impractical with div and mod
+    var $status;    // integer 0 undefined, 1 played, 2 not played
 
-    var $suit = 0;
-    var $number = 0;
-    var $status = 0;
-
-    /**
-     * @return integer
-     */
-    public function getNumber(): int
+    function __construct()
     {
-        return $this->number;
+        $this->setNumber(42);
+        $this->setStatus(0);
+    }
+
+
+    /**
+     * suit is not a variable but a calculated return
+     * first 8 cards [0..7] are spades, next hearts, next diamonds, next clubs
+     */
+    function getSuit() :int{
+        return intdiv($this->getNumber(),8) + 1;
     }
 
     /**
-     * @return integer
+     * face is not a variable but a calculated return
+     * first card [0] is the 7 of spades and onward
+     * must remember to show 11 as jack, 12 as queen, 13 as king, 14 as ace
      */
-    public function getStatus(): int
-    {
-        return $this->status;
+    function getFace() :int{
+        return (($this->getNumber() % 8) + 7);
     }
 
     /**
-     * @return integer
+     * points is not a variable but a calculated return
+     * business logic about score can be altered here
+     * hearts = 1 pts, i.e. suit = 2, i.e. 7 < $number < 16
+     * queen of spades = 5 pts, card number 5
+     * jack of clubs = 2 pts, card number 28
      */
-    public function getSuit(): int
-    {
-        return $this->suit;
+    function getPoints() :int{
+        switch ($this->getNumber()){
+            case 5: return 5;   // queen of spades
+            case 28: return 2;  // jacks of clubs
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                return 1;       // all hearts
+            default: return 0;  // rest of cards
+        }
     }
 
     /**
-     * @param integer $number
+     * @param int $number
      */
     public function setNumber(int $number)
     {
@@ -47,7 +66,15 @@ class  HeartsCard
     }
 
     /**
-     * @param integer $status
+     * @return int
+     */
+    public function getNumber() :int
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param int $status
      */
     public function setStatus(int $status)
     {
@@ -55,10 +82,10 @@ class  HeartsCard
     }
 
     /**
-     * @param integer $suit
+     * @return int
      */
-    public function setSuit(int $suit)
+    public function getStatus() :int
     {
-        $this->suit = $suit;
+        return $this->status;
     }
 }
