@@ -3,8 +3,13 @@
 /* All will be in English since this is a best practice I try to train for myself*/
 namespace MRJ\LSHearts;
 
-class HeartsGame
-{   var $myHand;
+
+include 'HeartsHand.php';
+
+
+
+class HeartsGame {
+    var $myHand;
 
     function __construct()
     {

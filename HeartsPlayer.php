@@ -4,6 +4,8 @@
 namespace MRJ\LSHearts;
 
 
+include 'HeartsCard.php';
+
 class HeartsPlayer
 {
     var $mycards;

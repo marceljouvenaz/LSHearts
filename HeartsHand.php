@@ -3,6 +3,11 @@
 
 namespace MRJ\LSHearts;
 
+
+include 'HeartsPlayer.php';
+include 'HeartsScore.php';
+
+
 class HeartsHand
 {
     var $myplayers;
