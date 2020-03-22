@@ -18,16 +18,28 @@ class HeartsGame {
 
     function play(){
         while($this->myHand->myscore->continueGame()){
+            $this->resetHand();
             $this->dealHand();
+            $this->printHand();
             $this->playRounds();
+            $this->printScore();
         }
     }
 
+    function resetHand(){
+        $this->myHand->resetPlayers();
+    }
     function dealHand(){
         $this->myHand->dealCards();
     }
+    function printHand(){
+        $this->myHand->printHands();
+    }
     function playRounds(){
         $this->myHand->playRounds();
+    }
+    function printScore(){
+        $this->myHand->printScore();
     }
 
     /**

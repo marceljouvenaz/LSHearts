@@ -29,8 +29,34 @@ class  HeartsCard
      * first card [0] is the 7 of spades and onward
      * must remember to show 11 as jack, 12 as queen, 13 as king, 14 as ace
      */
-    function getFace() :int{
-        return (($this->getNumber() % 8) + 7);
+    function getFace() :string {
+        switch (($this->getNumber() % 8)){
+            case 0:
+                $face = '7';
+                break;
+            case 1:
+                $face = '8';
+                break;
+            case 2:
+                $face = '9';
+                break;
+            case 3:
+                $face = '10';
+                break;
+            case 4:
+                $face = 'J';
+                break;
+            case 5:
+                $face = 'Q';
+                break;
+            case 6:
+                $face = 'K';
+                break;
+            case 7:
+                $face = 'A';
+                break;
+        }
+        return $face;
     }
 
     /**
@@ -55,6 +81,24 @@ class  HeartsCard
                 return 1;       // all hearts
             default: return 0;  // rest of cards
         }
+    }
+
+    function printCard(){
+        switch ($this->getSuit()){
+            case 1:
+                $suitsign = '♠';
+                break;
+            case 2:
+                $suitsign = '♥';
+                break;
+            case 3:
+                $suitsign = '♦';
+                break;
+            case 4:
+                $suitsign = '♣';
+                break;
+        }
+        echo $suitsign, $this->getFace();
     }
 
     /**
