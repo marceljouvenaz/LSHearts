@@ -98,7 +98,7 @@ class  HeartsCard
                 $suitsign = '♣';
                 break;
         }
-        echo $suitsign, $this->getFace();
+        echo $suitsign, $this->getFace(),"  ";
     }
 
     /**

@@ -20,7 +20,29 @@ class HeartsHand
         // names in honor of the late great Kenny Rogers
         $this->myplayers = [new HeartsPlayer("Janice"), new HeartsPlayer("Jean"), new HeartsPlayer("Margo"), new HeartsPlayer("Marianne")];
         $this->myscore = new HeartsScore();
-        $this->startingplayer = 0;
+        $this->startingplayer = rand(0,3);
+    }
+
+    /**
+     * @return int
+     */
+    public function getStartingplayer(): int
+    {
+        return $this->startingplayer;
+    }
+
+    /**
+     * @param int $startingplayer
+     */
+    public function setStartingplayer(int $startingplayer)
+    {
+        $this->startingplayer = $startingplayer;
+    }
+
+    function nextStartingplayer(){
+        $tempint = $this->getStartingplayer();
+        $hallo = ($tempint++)%4;
+        $this->setStartingplayer($hallo);
     }
 
     /**
@@ -42,6 +64,10 @@ class HeartsHand
     }
 
 
+    function resetPlayers(){
+        $this->setMyplayers([new HeartsPlayer("Janice"), new HeartsPlayer("Jean"), new HeartsPlayer("Margo"), new HeartsPlayer("Marianne")]);
+    }
+
     /**
      * this is simpler than dealing random cards then and checking whether they have already been dealt
      * also now the cards are automatically sorted in each player,
@@ -49,10 +75,10 @@ class HeartsHand
      * I will use this when playing a card in the correct suit,
      */
     function dealCards(){
-        for ($i = 0; $i < 31; $i++){
+        for ($i = 0; $i < 32; $i++){
             $this->dealCardToPlayer($i);
         }
-        switch (true){
+        /*switch (true){
             case $this->myplayers[0]->countCards()==7:
                 $this->myplayers[0]->addCard(31);
                 break;
@@ -66,11 +92,7 @@ class HeartsHand
             case $this->myplayers[3]->countCards()==7:
                 $this->myplayers[3]->addCard(31);
                 break;
-        }
-    }
-
-    function resetPlayers(){
-        $this->setMyplayers([new HeartsPlayer("Janice"), new HeartsPlayer("Jean"), new HeartsPlayer("Margo"), new HeartsPlayer("Marianne")]);
+        }*/
     }
 
     function dealCardToPlayer(int $cardnumber){
@@ -79,14 +101,6 @@ class HeartsHand
         } while ($this->myplayers[$r]->countCards() > 7);
         $this->myplayers[$r]->addCard($cardnumber);
 
-    }
-
-    function playRounds(){
-        for ($i=0; $i<8; $i++){
-            $temp = $this->playRound();
-            $this->calcScore($temp);
-
-        }
     }
 
     function printHands(){
@@ -99,30 +113,56 @@ class HeartsHand
         echo "<br>";
     }
 
-    function playRound() :array{
+    function playHand(){
+        for ($i=0; $i<8; $i++){
+            $temp = $this->playSingleround();
+            $this->printSingleRound($temp);
+            $this->calcScore($temp);
+        }
+    }
+
+
+    /**
+     * ($i+$this->getStartingplayer())%4 shifts the player who starts the round,
+     * since it contains %4, it will go from player 3 to player 0
+     */
+
+
+
+    function playSingleround() :array{
         $suit = 0;
         $myround = array();
+
         for ($i=0; $i<4; $i++){
-            $myround[$i] = $this->myplayers[$i]->playCard($suit);
+            $myround[($i+$this->getStartingplayer())%4] = $this->myplayers[($i+$this->getStartingplayer())%4]->playCard($suit);
             if($suit == 0){
-                $suit = $myround[$i]->getSuit();
+                $suit = $myround[($i+$this->getStartingplayer())%4]->getSuit();
             }
         }
         return $myround;
     }
 
+    function printSingleRound(array $myround){
+        for ($i=0; $i<4; $i++){
+            $name = $this->myplayers[($i+$this->getStartingplayer())%4]->getName();
+            echo "$name speelt: ";
+            $myround[($i+$this->getStartingplayer())%4]->printCard();
+        }
+    }
+
     function calcScore(array $myround){
-        $loser = 0;
+        $loser = $this->getStartingplayer();
         $points = 0;
-        for ($i=1; $i<4; $i++){
-            if ($myround[$loser]->getSuit() == ($myround[$i]->getSuit())and($myround[$loser]->getFace()<$myround[$i]->getFace())){
-                $loser = $i;
+        for ($i=0; $i<4; $i++){
+            if ($myround[$loser]->getSuit() == ($myround[($i+$this->getStartingplayer())%4]->getSuit())and($myround[$loser]->getFace()<$myround[($i+$this->getStartingplayer())%4]->getFace())){
+                $loser = ($i+$this->getStartingplayer())%4;
             }
             $points += $myround[$i]->getPoints();
         }
         $this->myscore->addPoints($loser, $points);
         $name = $this->myplayers[$loser]->getName();
         echo "$name has lost the round and scored $points points", "<br>";
+        $this->nextStartingplayer();
     }
 
     function printScore(){

@@ -21,7 +21,7 @@ class HeartsGame {
             $this->resetHand();
             $this->dealHand();
             $this->printHand();
-            $this->playRounds();
+            $this->playHand();
             $this->printScore();
         }
     }
@@ -35,8 +35,8 @@ class HeartsGame {
     function printHand(){
         $this->myHand->printHands();
     }
-    function playRounds(){
-        $this->myHand->playRounds();
+    function playHand(){
+        $this->myHand->playHand();
     }
     function printScore(){
         $this->myHand->printScore();
