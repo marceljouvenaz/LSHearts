@@ -6,7 +6,7 @@ namespace MRJ\LSHearts;
 
 class HeartsScore
 {
-    var $mypoints;
+    private $mypoints;
 
     function __construct(){
         $this->setMypoints([0,0,0,0]);

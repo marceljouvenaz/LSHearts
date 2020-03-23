@@ -6,8 +6,8 @@ namespace MRJ\LSHearts;
 
 class  HeartsCard
 {
-    var $number;    // integer [0..31] control value = 42, would have loved to use 0 for control value, but that's impractical with div and mod
-    var $status;    // integer 0 undefined, 1 played, 2 not played
+    private $number;    // integer [0..31] control value = 42, would have loved to use 0 for control value, but that's impractical with div and mod
+    private $status;    // integer 0 undefined, 1 played, 2 not played
 
     function __construct()
     {
@@ -98,7 +98,7 @@ class  HeartsCard
                 $suitsign = '♣';
                 break;
         }
-        echo $suitsign, $this->getFace(),"  ";
+        print ($suitsign.$this->getFace()."  ");
     }
 
     /**

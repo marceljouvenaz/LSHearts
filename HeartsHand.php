@@ -10,9 +10,9 @@ include 'HeartsScore.php';
 
 class HeartsHand
 {
-    var $myplayers;
-    var $myscore;
-    var $startingplayer;
+    private $myplayers;
+    private $myscore;
+    private $startingplayer;
 
 
     function __construct()
@@ -63,6 +63,22 @@ class HeartsHand
         return $this->myplayers;
     }
 
+    /**
+     * @return HeartsScore
+     */
+    public function getMyscore(): HeartsScore
+    {
+        return $this->myscore;
+    }
+
+    /**
+     * @param HeartsScore $myscore
+     */
+    public function setMyscore(HeartsScore $myscore)
+    {
+        $this->myscore = $myscore;
+    }
+
 
     function resetPlayers(){
         $this->setMyplayers([new HeartsPlayer("Janice"), new HeartsPlayer("Jean"), new HeartsPlayer("Margo"), new HeartsPlayer("Marianne")]);
@@ -106,11 +122,11 @@ class HeartsHand
     function printHands(){
         for ($i=0; $i<4; $i++){
             $name = $this->myplayers[$i]->getName();
-            echo "$name has: ";
+            print ("$name has: ");
             $this->myplayers[$i]->printPlayerCards();
-            echo "<br>";
+            print ("<br>");
         }
-        echo "<br>";
+        print ("<br>");
     }
 
     function playHand(){
@@ -145,7 +161,7 @@ class HeartsHand
     function printSingleRound(array $myround){
         for ($i=0; $i<4; $i++){
             $name = $this->myplayers[($i+$this->getStartingplayer())%4]->getName();
-            echo "$name speelt: ";
+            print ("$name plays: ");
             $myround[($i+$this->getStartingplayer())%4]->printCard();
         }
     }
@@ -161,17 +177,21 @@ class HeartsHand
         }
         $this->myscore->addPoints($loser, $points);
         $name = $this->myplayers[$loser]->getName();
-        echo "$name has lost the round and scored $points points", "<br>";
+        print ("$name has lost the round and scored $points points <br>");
         $this->nextStartingplayer();
     }
 
     function printScore(){
-        echo "<br>";
+        print ("<br>");
         for($i=0; $i<4; $i++){
             $s = $this->myscore->getMypoints()[$i];
             $name = $this->myplayers[$i]->getName();
-            echo "$name has $s points <br>";
+            print ("$name has $s points <br>");
         }
-        echo "<br><br>";
+        print ("<br><br>");
+    }
+
+    function continueGame(){
+        return $this->getMyscore()->continueGame();
     }
 }

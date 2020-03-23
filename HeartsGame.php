@@ -9,7 +9,7 @@ include 'HeartsHand.php';
 
 
 class HeartsGame {
-    var $myHand;
+    private $myHand;
 
     function __construct()
     {
@@ -17,7 +17,7 @@ class HeartsGame {
     }
 
     function play(){
-        while($this->myHand->myscore->continueGame()){
+        while($this->continueGame()){
             $this->resetHand();
             $this->dealHand();
             $this->printHand();
@@ -26,6 +26,9 @@ class HeartsGame {
         }
     }
 
+    function continueGame() :bool {
+        return $this->getMyHand()->continueGame();
+    }
     function resetHand(){
         $this->myHand->resetPlayers();
     }

@@ -8,8 +8,8 @@ include 'HeartsCard.php';
 
 class HeartsPlayer
 {
-    var $mycards;
-    var $name;
+    private $mycards;
+    private $name;
 
     function __construct(string $myname)
     {
