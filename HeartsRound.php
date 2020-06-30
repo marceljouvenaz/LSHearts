@@ -3,6 +3,7 @@
 
 namespace MRJ\LSHearts;
 
+include 'HeartsCard.php';
 
 class HeartsRound
 {
@@ -15,8 +16,13 @@ class HeartsRound
         $this->setStartingplayer($player);
     }
 
+    function playCard(int $player, int $cardnumber)
+    {
+        $this->playedcards[$player]->setNumber($cardnumber);
+    }
+
     /**
-     * @param mixed $playedcards
+     * @param array $playedcards
      */
     public function setPlayedcards($playedcards)
     {
@@ -24,7 +30,7 @@ class HeartsRound
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getPlayedcards()
     {
@@ -32,7 +38,7 @@ class HeartsRound
     }
 
     /**
-     * @param mixed $startingplayer
+     * @param int $startingplayer
      */
     public function setStartingplayer($startingplayer)
     {
@@ -40,7 +46,7 @@ class HeartsRound
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getStartingplayer()
     {
